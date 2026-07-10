@@ -23,6 +23,10 @@ class _SolarImagesState extends State<SolarImages> {
   bool _isLoading = false;
   DateTime agora = DateTime.now();
 
+  TextEditingController _xaCtrl = TextEditingController();
+  TextEditingController _xbCtrl = TextEditingController();
+  TextEditingController _yaCtrl = TextEditingController();
+  TextEditingController _ybCtrl = TextEditingController();
   TextEditingController _anoCtrl = TextEditingController();
   TextEditingController _mesCtrl = TextEditingController();
   TextEditingController _diaCtrl = TextEditingController();
@@ -45,6 +49,10 @@ class _SolarImagesState extends State<SolarImages> {
     );
 
     // Adicione no início da sua classe de estado:
+    _xaCtrl = TextEditingController(text: '-1200');
+    _xbCtrl = TextEditingController(text: '1200');
+    _yaCtrl = TextEditingController(text: '-1200');
+    _ybCtrl = TextEditingController(text: '1200');
     _anoCtrl = TextEditingController(text: agora.year.toString());
     _mesCtrl =
         TextEditingController(text: agora.month.toString().padLeft(2, '0'));
@@ -61,6 +69,10 @@ class _SolarImagesState extends State<SolarImages> {
   // Lembre-se de limpá-los para evitar vazamento de memória
   @override
   void dispose() {
+    _xaCtrl.dispose();
+    _xaCtrl.dispose();
+    _yaCtrl.dispose();
+    _ybCtrl.dispose();
     _anoCtrl.dispose();
     _mesCtrl.dispose();
     _diaCtrl.dispose();
@@ -117,22 +129,28 @@ class _SolarImagesState extends State<SolarImages> {
   Widget _dataTimeField() {
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       Row(children: [
-        const Text("Data: "),
-        Expanded(child: campo('aaaa', _anoCtrl)),
-
-        const SizedBox(width: 10), // Espaço entre o campo 1 e 2
-        Expanded(child: campo('mm', _mesCtrl)),
-
+        const Center(child: Text("Recorte: ")),
+        Expanded(child: campo('aaaa', _anoCtrl, true)),
         const SizedBox(width: 10),
-        Expanded(child: campo('dd', _diaCtrl)),
+        Expanded(child: campo('mm', _mesCtrl, false)),
+        const SizedBox(width: 10),
+        Expanded(child: campo('dd', _diaCtrl, false)),
       ]),
       Row(children: [
-        const Text("Hora: "),
-        Expanded(child: campo('hh', _horaCtrl)),
+        const Center(child: Text("Data: ")),
+        Expanded(child: campo('aaaa', _anoCtrl, true)),
         const SizedBox(width: 10),
-        Expanded(child: campo('mm', _minCtrl)),
+        Expanded(child: campo('mm', _mesCtrl, false)),
         const SizedBox(width: 10),
-        Expanded(child: campo('ss', _segCtrl)),
+        Expanded(child: campo('dd', _diaCtrl, false)),
+      ]),
+      Row(children: [
+        const Center(child: Text("Hora: ")),
+        Expanded(child: campo('hh', _horaCtrl, false)),
+        const SizedBox(width: 10),
+        Expanded(child: campo('mm', _minCtrl, false)),
+        const SizedBox(width: 10),
+        Expanded(child: campo('ss', _segCtrl, false)),
       ]),
     ]);
   }
