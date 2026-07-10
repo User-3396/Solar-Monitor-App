@@ -121,3 +121,63 @@ Stack(
   ],
 )
 ```
+
+## 3. Integração com HTML
+
+### Renderizar textos com tags HTML (Bold, Links, Itálico)
+
+Se o seu objetivo é exibir textos formatados vindos de um banco de dados ou de uma API (ex: `<b>Texto em negrito</b>`), você não precisa de uma página web inteira.
+Basta usar pacotes que convertem essas tags diretamente em widgets nativos do Flutter (`Text`, `RichText`).
+
+- __Como fazer__: Utilize o pacote [flutter_html](https://pub.dev/packages/flutter_html) ou [flutter_widget_from_html](https://pub.dev/packages/flutter_widget_from_html).
+- __Resultado__: O Flutter lê as tags simples e renderiza o texto com a formatação correta em qualquer plataforma (Web, Android, iOS), sem perda de performance.
+
+```dart 
+// Exemplo com flutter_widget_from_html
+HtmlWidget(
+  '<h3>Título em HTML</h3><p>Este é um parágrafo com um <a href="https://flutter.dev">link</a>.</p>',
+)
+```
+
+### Integração profunda no Flutter Web (Elementos HTML reais)
+
+Se você está criando um aplicativo para a Web, o Flutter possui uma ferramenta nativa chamada `HtmlElementView`. Ela permite injetar elementos HTML reais (como `<div>`, `<video>`, `<iframe>`, ou scripts customizados) diretamente no meio do seu layout Flutter.
+
+- __Como funciona__: Você registra uma fábrica de elementos HTML usando a biblioteca `dart:ui_web` (antiga `dart:ui`) e a exibe como se fosse um widget comum do Flutter.
+- __Exemplo prático (Inserir um iframe ou elemento de texto HTML)__:
+
+```dart
+import 'dart:ui_web' as ui_web;
+import 'package:web/web.dart' as web; // Biblioteca moderna para interagir com o navegador
+// ...
+
+// 1. Registre o elemento HTML (geralmente no initState)
+ui_web.platformViewRegistry.registerViewFactory(
+  'meu-elemento-html',
+  (int viewId) {
+    final elemento = web.HTMLParagraphElement();
+    elemento.text = 'Este é um parágrafo HTML real rodando no Flutter Web!';
+    elemento.style.color = 'blue';
+    return elemento;
+  },
+);
+
+// 2. Use no seu método build:
+SizedBox(
+  width: 300,
+  height: 50,
+  child: HtmlElementView(viewType: 'meu-elemento-html'),
+)
+```
+
+### Exibir páginas web completas (WebViews no Mobile)
+
+Se você precisa exibir um site inteiro ou um sistema complexo em HTML/JS dentro do seu aplicativo para Android ou iOS, a solução é usar um componente de tela cheia ou parcial de navegador.
+
+- __Como fazer__: Utilize o pacote oficial [webview_flutter](https://pub.dev/packages/webview_flutter) mantido pela equipe do Flutter.
+- __Como funciona__: Ele abre uma instância do navegador nativo do sistema (Chromium no Android / WebKit no iOS) "mascarada" dentro de um widget do Flutter. Você pode carregar um link externo ou uma string com um código HTML completo.
+
+### Resumo das limitações importantes
+
+- __Não é um substituto de layout__: Você não pode criar a estrutura visual do seu aplicativo Flutter usando HTML/CSS tradicional. O Flutter usa seu próprio motor de renderização gráfica.
+- __Performance__: Injetar muito HTML dentro do Flutter Mobile (via WebView) ou do Flutter Web (via muitos `HtmlElementView`) pode deixar o aplicativo pesado e causar lentidão nas animações, pois exige que dois motores gráficos trabalhem juntos.
