@@ -2,6 +2,8 @@
 
 ## 1. Redimensionamento
 
+<details><summary>Detalhes</summary>
+
 ```dart
 // largura do componente preenchendo a largura do elemento pai
 Container(
@@ -56,7 +58,11 @@ Row(
 )
 ```
 
+</details>
+
 ## 2. Alinhamentos
+
+<details><summary>Detalhes</summary>
 
 - __MainAxisAlignment__ (eixo principal)
 - __CrossAxisAlignment__ (eixo cruzado)
@@ -122,7 +128,11 @@ Stack(
 )
 ```
 
+</details>
+
 ## 3. Integração com HTML
+
+<details><summary>Detalhes</summary>
 
 ### Renderizar textos com tags HTML (Bold, Links, Itálico)
 
@@ -181,3 +191,125 @@ Se você precisa exibir um site inteiro ou um sistema complexo em HTML/JS dentro
 
 - __Não é um substituto de layout__: Você não pode criar a estrutura visual do seu aplicativo Flutter usando HTML/CSS tradicional. O Flutter usa seu próprio motor de renderização gráfica.
 - __Performance__: Injetar muito HTML dentro do Flutter Mobile (via WebView) ou do Flutter Web (via muitos `HtmlElementView`) pode deixar o aplicativo pesado e causar lentidão nas animações, pois exige que dois motores gráficos trabalhem juntos.
+
+</details>
+
+## 4. Formatador de texto e mascaras
+
+<details><summary>Detalhes</summary>
+  
+Você pode criar suas próprias regras de validação ou usar pacotes da comunidade que resolvem isso com poucas linhas de código. A abordagem recomendada é o uso do pacote `easy_mask` ou `mask_text_input_formatter`, pois eles gerenciam automaticamente o comportamento de apagar e digitar caracteres especiais.
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter';
+
+class CampoDataWidget extends StatefulWidget {
+  const CampoDataWidget({super.key});
+
+  @override
+  State<CampoDataWidget> createState() => _CampoDataWidgetState();
+}
+
+class _CampoDataWidgetState extends State<CampoDataWidget> {
+  // 1. Defina o formato da máscara. O '#' representa onde entram os números.
+  final mascaraData = MaskTextInputFormatter(
+    mask: '##/##/####', 
+    filter: { "#": RegExp(r'[0-9]') }, // Garante que apenas números sejam digitados
+    type: MaskAutoCompletionType.lazy,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      // 2. Injete a máscara na propriedade inputFormatters
+      inputFormatters: [mascaraData],
+      // 3. Configure o teclado para exibir apenas números
+      keyboardType: TextInputType.number, 
+      decoration: const InputDecoration(
+        labelText: 'Data de Nascimento',
+        hintText: 'DD/MM/AAAA',
+        border: OutlineInputBorder(),
+      ),
+    );
+  }
+}
+```
+
+### pegar o valor digitado (Com ou sem máscara):
+
+```dart
+// Exemplo de como ler os valores dentro de um botão de salvar:
+void salvarDados() {
+  String comMascara = mascaraData.getMaskedText();   // Retorna: "10/07/2026"
+  String semMascara = mascaraData.getUnmaskedText(); // Retorna apenas números: "10072026"
+  
+  print("Salvando no banco: $semMascara");
+}
+```
+
+### Opção 2 `easy_mask`
+
+Se você precisar de um campo dinâmico (como um campo que aceita CPF ou CNPJ ao mesmo tempo), o pacote easy_mask é excelente porque aceita uma lista de formatos alternativos.
+
+```dart
+import 'package:easy_mask/easy_mask.dart';
+
+TextField(
+  inputFormatters: [
+    TextInputMask(mask: '99/99/9999') // O '9' representa números neste pacote
+  ],
+)
+```
+
+### Dica extra para datas: Validação básica
+
+A máscara apenas força o formato visual (impede o usuário de digitar `999/99/9`), mas ela não impede o usuário de digitar uma data inválida como `45/19/2026`. Para evitar isso, valide o texto antes de enviar:
+
+```dart
+String texto = mascaraData.getMaskedText();
+List<String> partes = texto.split('/');
+
+if (partes.length == 3) {
+  int? dia = int.tryParse(partes[0]);
+  int? mes = int.tryParse(partes[1]);
+  
+  if (dia == null || dia < 1 || dia > 31 || mes == null || mes < 1 || mes > 12) {
+    print("Data inválida!");
+  }
+}
+```
+
+### Sobre `inputFormatters:[]`
+
+__Exemplo de combinação de formatadores__
+
+Imagine que você quer um campo de data, mas quer garantir duas regras:
+
+1. O usuário só pode digitar números (bloquear letras).
+2. O texto deve receber a máscara de data (##/##/####).
+
+Você passa ambas as regras dentro do vetor:
+
+```dart
+TextField(
+  inputFormatters: [
+    // Primeiro: Bloqueia qualquer caractere que não seja número
+    FilteringTextInputFormatter.digitsOnly, 
+    
+    // Segundo: Aplica a máscara nos números que restaram
+    mascaraData, 
+  ],
+)
+```
+
+__Principais formatadores nativos do Flutter__ 
+
+Como `inputFormatters` aceita qualquer classe que herde de `TextInputFormatter`, você pode usar os seguintes validadores nativos diretamente no vetor, sem baixar nenhum pacote:
+
+- `FilteringTextInputFormatter.digitsOnly`: Permite apenas números.
+- `FilteringTextInputFormatter.allow(RegExp(...))`: Permite apenas os caracteres que batem com uma Expressão Regular (ex: apenas letras).
+- `FilteringTextInputFormatter.deny(RegExp(...))`: Bloqueia caracteres específicos (ex: proibir espaços).
+- `LengthLimitingTextInputFormatter(10)`: Limita o campo a no máximo 10 caracteres. [[1]](https://pub.dev/packages/brasil_fields)
+
+</details>
