@@ -1,11 +1,11 @@
-// import 'dart:html';
-
 import 'package:flutter/material.dart';
 // import 'package:http/http.dart' as http;
-import './ImagemWebDinamica.dart';
-import '../assets/styles.dart';
 import 'dart:ui_web' as ui_web; // No Flutter moderno
 import 'dart:html' as html;
+
+import './ImagemWebDinamica.dart';
+import '../assets/styles.dart';
+import '../assets/controles.dart';
 
 class SolarImages extends StatefulWidget {
   const SolarImages({super.key});
@@ -22,17 +22,7 @@ class _SolarImagesState extends State<SolarImages> {
   // String _log = "";
   bool _isLoading = false;
   DateTime agora = DateTime.now();
-
-  TextEditingController _xaCtrl = TextEditingController();
-  TextEditingController _xbCtrl = TextEditingController();
-  TextEditingController _yaCtrl = TextEditingController();
-  TextEditingController _ybCtrl = TextEditingController();
-  TextEditingController _anoCtrl = TextEditingController();
-  TextEditingController _mesCtrl = TextEditingController();
-  TextEditingController _diaCtrl = TextEditingController();
-  TextEditingController _horaCtrl = TextEditingController();
-  TextEditingController _minCtrl = TextEditingController();
-  TextEditingController _segCtrl = TextEditingController();
+  late final Controles controles;
 
   @override
   void initState() {
@@ -48,37 +38,15 @@ class _SolarImagesState extends State<SolarImages> {
         ..style.height = '100%',
     );
 
-    // Adicione no início da sua classe de estado:
-    _xaCtrl = TextEditingController(text: '-1200');
-    _xbCtrl = TextEditingController(text: '1200');
-    _yaCtrl = TextEditingController(text: '-1200');
-    _ybCtrl = TextEditingController(text: '1200');
-    _anoCtrl = TextEditingController(text: agora.year.toString());
-    _mesCtrl =
-        TextEditingController(text: agora.month.toString().padLeft(2, '0'));
-    _diaCtrl =
-        TextEditingController(text: agora.day.toString().padLeft(2, '0'));
-    _horaCtrl =
-        TextEditingController(text: agora.hour.toString().padLeft(2, '0'));
-    _minCtrl =
-        TextEditingController(text: agora.minute.toString().padLeft(2, '0'));
-    _segCtrl =
-        TextEditingController(text: agora.second.toString().padLeft(2, '0'));
+    controles = Controles([-1200, 1200, -1200, 1200],
+        DateTime.now().toUtc().subtract(const Duration(hours: 12)));
+    // controles = TextEditingController(text: agora.year.toString());
   }
 
   // Lembre-se de limpá-los para evitar vazamento de memória
   @override
   void dispose() {
-    _xaCtrl.dispose();
-    _xaCtrl.dispose();
-    _yaCtrl.dispose();
-    _ybCtrl.dispose();
-    _anoCtrl.dispose();
-    _mesCtrl.dispose();
-    _diaCtrl.dispose();
-    _horaCtrl.dispose();
-    _minCtrl.dispose();
-    _segCtrl.dispose();
+    controles.toDispose();
     super.dispose();
   }
   //_imageUrl ="$_baseUrl??action=takeScreenshot&imageScale=10.654375&layers=[13,1,100]&events=&eventLabels=false&scale=false&scaleType=earth&scaleX=0&scaleY=0&date=2026/07/09T16:49:05Z&x1=-1073&x2=1655&y1=-1143&y2=1028&display=true&watermark=false&v=${DateTime.now().millisecondsSinceEpoch}"; // Evita cache do app
@@ -88,7 +56,9 @@ class _SolarImagesState extends State<SolarImages> {
     return Scaffold(
       appBar: AppBar(title: const Text("Monitor Solar Móvel")),
       body: Container(
-        color: Color(0xff0f202e),
+        // width: 0.95,
+        alignment: Alignment.topCenter,
+        color: Color(0xff000000),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -128,29 +98,39 @@ class _SolarImagesState extends State<SolarImages> {
 
   Widget _dataTimeField() {
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      const Center(
+          child: Text("Recorte: ", style: TextStyle(color: Colors.blue))),
       Row(children: [
-        const Center(child: Text("Recorte: ")),
-        Expanded(child: campo('aaaa', _anoCtrl, true)),
+        Expanded(child: campo('x1', controles.corte.xaCtrl, 'eixo')),
         const SizedBox(width: 10),
-        Expanded(child: campo('mm', _mesCtrl, false)),
+        Expanded(child: campo('x2', controles.corte.xbCtrl, 'eixo')),
         const SizedBox(width: 10),
-        Expanded(child: campo('dd', _diaCtrl, false)),
+        Expanded(child: campo('y1', controles.corte.yaCtrl, 'eixo')),
+        const SizedBox(width: 10),
+        Expanded(child: campo('y2', controles.corte.ybCtrl, 'eixo')),
       ]),
+      const SizedBox(width: 10),
+      const Center(
+          child: Text(
+        "Data: ",
+        style: TextStyle(color: Colors.blue),
+      )),
       Row(children: [
-        const Center(child: Text("Data: ")),
-        Expanded(child: campo('aaaa', _anoCtrl, true)),
+        Expanded(child: campo('aaaa', controles.data.ano, 'ano')),
         const SizedBox(width: 10),
-        Expanded(child: campo('mm', _mesCtrl, false)),
+        Expanded(child: campo('mm', controles.data.mes, 'data')),
         const SizedBox(width: 10),
-        Expanded(child: campo('dd', _diaCtrl, false)),
+        Expanded(child: campo('dd', controles.data.dia, 'data')),
       ]),
+      const Center(
+          child: Text("Hora (UTC, 12 horas atras): ",
+              style: TextStyle(color: Colors.blue))),
       Row(children: [
-        const Center(child: Text("Hora: ")),
-        Expanded(child: campo('hh', _horaCtrl, false)),
+        Expanded(child: campo('hh', controles.data.hora, 'data')),
         const SizedBox(width: 10),
-        Expanded(child: campo('mm', _minCtrl, false)),
+        Expanded(child: campo('mm', controles.data.min, 'data')),
         const SizedBox(width: 10),
-        Expanded(child: campo('ss', _segCtrl, false)),
+        Expanded(child: campo('ss', controles.data.seg, 'data')),
       ]),
     ]);
   }
@@ -163,21 +143,24 @@ class _SolarImagesState extends State<SolarImages> {
     // 2. Separe todos os parâmetros da URL em um Map estruturado
     final Map<String, String> parametros = {
       'action': 'takeScreenshot',
-      'imageScale': '10.654375',
-      'layers':
-          '[13,1,100]', // O Dart vai codificar os colchetes automaticamente
+      'imageScale': '2.5', //'10.654375',
+      'layers': '[SDO,AIA,131]',
+      //'[13,1,100]', // O Dart vai codificar os colchetes automaticamente
       'events': '',
       'eventLabels': 'false',
       'scale': 'false',
       'scaleType': 'earth',
       'scaleX': '0',
       'scaleY': '0',
-      'date':
-          '${_anoCtrl.text}-${_mesCtrl.text}-${_diaCtrl.text}T${_horaCtrl.text}:${_minCtrl.text}:${_segCtrl.text}Z', // Nota: Ajustado para o padrão ISO (hífen) que a API do Helioviewer espera
-      'x1': '-1200',
-      'x2': '1200',
-      'y1': '-1200',
-      'y2': '1200',
+      'date': controles.data.toText(),
+      // '${.ano.text}-${_mesCtrl.text}-${_diaCtrl.text}T${_horaCtrl.text}:${_minCtrl.text}:${_segCtrl.text}Z', // Nota: Ajustado para o padrão ISO (hífen) que a API do Helioviewer espera
+      'x0': '0', 'y0': '0',
+      // 'x1': '-1200', //_xaCtrl.text,
+      // 'x2': '1200', //_xbCtrl.text,
+      // 'y1': '-1200', //_yaCtrl.text,
+      // 'y2': '1200', //_ybCtrl.text,
+      'width': '1024',
+      'height': '1024',
       'display': 'true',
       'watermark': 'false',
     };
