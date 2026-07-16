@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'views/solarRequests.dart';
+import 'views/solarRequestsPage.dart';
 
 void main() => runApp(MyApp());
 
@@ -48,10 +48,10 @@ class HomePage extends StatelessWidget {
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  const Text(
-                    'Good bye, World!',
-                    style: TextStyle(color: Colors.amber),
-                  ),
+                  // const Text(
+                  //   'Good bye, World!',
+                  //   style: TextStyle(color: Colors.amber),
+                  // ),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.pushNamed(context, '/images');

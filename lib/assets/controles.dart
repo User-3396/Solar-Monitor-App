@@ -55,15 +55,18 @@ class Corte {
 }
 
 class Controles {
+  final TextEditingController layers;
   final Corte corte;
   final Data data;
 
-  Controles(List<int> c, DateTime d)
-      : corte = Corte(c),
+  Controles(int l, List<int> c, DateTime d)
+      : layers = TextEditingController(text: l.toString()),
+        corte = Corte(c),
         data = Data(d);
 
   void toDispose() {
     corte.disp();
     data.disp();
+    layers.dispose();
   }
 }
