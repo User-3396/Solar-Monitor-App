@@ -313,3 +313,48 @@ Como `inputFormatters` aceita qualquer classe que herde de `TextInputFormatter`,
 - `LengthLimitingTextInputFormatter(10)`: Limita o campo a no máximo 10 caracteres. [[1]](https://pub.dev/packages/brasil_fields)
 
 </details>
+
+
+Para fazer o container pai ocupar pelo menos toda a altura da tela (fazendo a barra de rolagem aparecer apenas se o conteúdo ultrapassar esse limite), você deve usar a propriedade primary: false e definir viewportFraction com valor igual a 1.0 no SingleChildScrollView ou utilizar LayoutBuilder.Isso substitui o minHeight: double.maxFinite problemático e impede o erro de renderização do Expanded dentro do scroll.
+
+```dart
+Scrollbar(
+  controller: _scrollController,
+  thumbVisibility: true,
+  thickness: 6.0,
+  child: SingleChildScrollView(
+    controller: _scrollController,
+    // Garante que o scroll ocupará toda a área visível do dispositivo
+    primary: false, 
+    child: LayoutBuilder(
+      builder: (context, constraints) {
+        return ConstrainedBox(
+          // Define a altura mínima baseada no espaço disponível na tela
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: IntrinsicHeight(
+            child: Container(
+              alignment: Alignment.topCenter,
+              color: const Color(0xff000000),
+              child: Column(
+                children: [
+                  Container(
+                    width: 100,
+                    height: 80,
+                    color: const Color.fromARGB(255, 255, 255, 200),
+                  ),
+                  // Outros widgets vão aqui...
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    ),
+  ),
+)
+```
+
+O que cada propriedade faz:
+
+- LayoutBuilder: Lê o tamanho máximo disponível na tela ou área de visualização.BoxConstraints(minHeight: constraints.maxHeight): Força o Container a ter a altura mínima equivalente a todo o tamanho da tela.
+- IntrinsicHeight: Garante que, caso algum filho do Container precise ser alinhado ao final da tela, a medição dinâmica da coluna funcione perfeitamente.
