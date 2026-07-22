@@ -358,3 +358,13 @@ O que cada propriedade faz:
 
 - LayoutBuilder: Lê o tamanho máximo disponível na tela ou área de visualização.BoxConstraints(minHeight: constraints.maxHeight): Força o Container a ter a altura mínima equivalente a todo o tamanho da tela.
 - IntrinsicHeight: Garante que, caso algum filho do Container precise ser alinhado ao final da tela, a medição dinâmica da coluna funcione perfeitamente.
+
+## Regras de layout do Flutter
+
+1. Erros comuns: 
+- __Uso incorreto de widgets de layout__: Widgets como `Expanded`, `Flexible` ou `Positioned` foram colocados fora de seus containers obrigatórios (`Row`, `Column`, `Flex` ou `Stack`).
+- __Conflito no InputDecorator__: Há um problema com o tamanho ou restrições de um campo de texto (`TextField` ou `TextFormField`). Ele está tentando se expandir infinitamente ou foi colocado dentro de um widget que não impõe limites de altura/largura.
+
+- Expanded ou Flexible: Garanta que eles sejam filhos diretos de uma Row, Column ou Flex.
+- Verifique os `Positioned`: Garanta que eles sejam filhos diretos de uma `Stack`.
+- Limite o tamanho do campo de texto: Se o erro disparar perto de um TextField, envolva-o em um SizedBox com altura/largura definida ou use um Container com restrições.
