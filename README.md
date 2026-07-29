@@ -410,3 +410,36 @@ O que cada propriedade faz:
 - Expanded ou Flexible: Garanta que eles sejam filhos diretos de uma Row, Column ou Flex.
 - Verifique os `Positioned`: Garanta que eles sejam filhos diretos de uma `Stack`.
 - Limite o tamanho do campo de texto: Se o erro disparar perto de um TextField, envolva-o em um SizedBox com altura/largura definida ou use um Container com restrições.
+
+## DefaultTabController
+
+```dart
+DefaultTabController(
+  length: 3, // quantidade de abas
+  child: Scaffold(
+    backgroundColor: const Color(0xffffffff),
+    appBar: AppBar(
+      centerTitle: true,
+      backgroundColor: const Color(0xff1f1f1f),
+      title: const Text(
+        'Pagina principal',
+        style: TextStyle(
+          color: Color(0xffdadada),
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      bottom: const TabBar(
+        tabs: [
+          Tab(icon: Icon(Icons.home), text: 'Início'),
+          Tab(icon: Icon(Icons.search), text: 'Buscar'),
+          Tab(icon: Icon(Icons.person), text: 'Conta'),
+        ],
+      ),
+    ),
+    body: const TabBarView(
+      children: [],
+    ),
+  ));
+```
+
