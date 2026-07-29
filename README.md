@@ -57,6 +57,48 @@ Row(
   ],
 )
 ```
+### Scrollbar
+
+```dart
+Scrollbar(
+  controller: _scrollController,
+  thumbVisibility: true,
+  thickness: 6.0, // Espessura da barra de rolagem
+  child: SingleChildScrollView(
+    controller: _scrollController,
+    primary: false, // Garante que o scroll ocupará toda a área visível do dispositivo
+    child: LayoutBuilder(builder: (context, constraints) {
+      return ConstrainedBox(
+        constraints: BoxConstraints(minHeight: constraints.maxHeight),
+        child: IntrinsicHeight(
+          child: Container(
+          alignment: Alignment.topCenter,
+          // width: double.maxFinite,
+          color: const Color(0xff000000),
+        )),
+      );
+    }),
+  ),
+));
+```
+
+### ConstrainedBox
+
+```dart
+ConstrainedBox(
+  constraints: BoxConstraints(
+    minWidth: MediaQuery.of(context).size.width,
+    minHeight: MediaQuery.of(context).size.height,
+  ),
+  child: Expanded(
+    child: Container(
+      padding: const EdgeInsets.all(12),
+      color: Colors.black,
+      child: Container(),
+    ),
+  ),
+)
+```
 
 </details>
 
