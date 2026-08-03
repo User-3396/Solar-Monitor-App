@@ -43,3 +43,38 @@
 - `textInputAction`: Muda o ícone do botão de ação do teclado (ex: `TextInputAction.next` exibe uma seta para avançar, `TextInputAction.search` exibe uma lupa).
 - `readOnly`: Se true, o usuário consegue clicar e selecionar o texto, mas não consegue alterar nada (ótimo para campos onde o usuário escolhe a informação em um calendário ou modal).
 </details>
+
+# Dispose
+
+<details><summary>Detalhes</summary>
+
+O método `void dispose()` deve ser utilizado __sempre que o seu widget for do tipo `StatefulWidget` e criar objetos que consomem recursos do sistema de forma contínua__.
+No Flutter, o `dispose()` serve para fechar, cancelar ou limpar esses objetos antes que o widget seja destruído e removido permanentemente da árvore de widgets. Se você não fizer isso, esses objetos continuam rodando em segundo plano, gerando __vazamentos de memória (memory leaks)__ e travamentos no app.
+
+## Quando é obrigatório ou altamente recomendável usar?
+
+### 1. Controladores de Animação e Texto
+
+Sempre que você instanciar controladores que interagem com a tela ou com o tempo.
+
+- `TextEditingController` (inputs de texto)
+- `AnimationController` (animações customizadas)
+- `PageController` (controle de páginas/slides)
+- `ScrollController` (controle de rolagem de listas)
+
+### 2. Fluxos de Dados e Conexões (Streams)
+
+Se você assina um canal de dados que envia atualizações contínuas, precisa fechar essa escuta.
+
+- `StreamController` e `StreamSubscription`
+- Conexões de WebSockets
+- Listeners de pacotes externos (como RxDart ou canais de áudio)
+
+### 3. Temporizadores (Timers)
+
+Se você cria contadores ou execuções agendadas que rodam em intervalos de tempo.
+
+- `Timer.periodic`
+
+</details>
+
