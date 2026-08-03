@@ -411,6 +411,22 @@ O que cada propriedade faz:
 - Verifique os `Positioned`: Garanta que eles sejam filhos diretos de uma `Stack`.
 - Limite o tamanho do campo de texto: Se o erro disparar perto de um TextField, envolva-o em um SizedBox com altura/largura definida ou use um Container com restrições.
 
+__`if` e chaves de coleção:__
+- No Flutter, ao usar if dentro de uma List (children: []), você não deve usar chaves {} como em blocos de código padrão. Usa-se o "Collection If". Ex:
+  ```dart
+  Column(
+    children[
+      Text("Widget fora de if"),
+      // (...,)
+      if (_isLoading) ...[
+        Text("Widget 1 dentro de if"),
+        Text("Widget 2 dentro de if"),
+      ]
+    ],
+  ),
+  ```
+
+
 ## DefaultTabController
 
 ```dart
