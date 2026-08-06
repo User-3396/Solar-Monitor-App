@@ -140,3 +140,25 @@ print(res.nome); // Saída: Dart
 // 'cargo' tem um valor padrão, 'ativo' é opcional e aceita nulo
 void configurarWidget({String? ativo, String cargo = 'membro'}) {}
 ```
+
+# Arquivo json
+
+__1. Registrar o arquivo no pubspec.yaml__
+
+```dart
+flutter:
+  assets:
+    - assets/dados.json
+```
+
+__2. Extrair conteudo:__
+
+````dart
+import 'package:flutter/services.dart' show rootBundle;
+
+Future<Map<String, dynamic>> getJson() async {
+  String content = await rootBundle.loadString('/assets/dados.json');
+  return jsonDecode(content);
+}
+```
+
