@@ -128,4 +128,15 @@ print(res.id);   // Saída: 1
 print(res.nome); // Saída: Dart
 ```
 
+# Funções
 
+### Parâmetros com chaves `{}`
+
+- __Com chaves {}__: Parâmetros nomeados, opcionais por padrão, ordem livre.
+- __Obrigatórios dentro da chave__: Use a palavra `required` antes do tipo (ex: `{required String nome}`).
+- __Sem chaves__: Parâmetros posicionais, obrigatórios por padrão, ordem estrita.
+
+```dart
+// 'cargo' tem um valor padrão, 'ativo' é opcional e aceita nulo
+void configurarWidget({String? ativo, String cargo = 'membro'}) {}
+```
