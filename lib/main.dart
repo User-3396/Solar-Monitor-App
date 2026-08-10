@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'views/imagesPage.dart';
 import 'views/videosPage.dart';
 import 'views/marketPage.dart';
+import 'views/testesPage.dart';
 
 void main() => runApp(MyApp());
 
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
         '/images': (context) => const SolarImagePage(),
         '/videos': (context) => const SolarVideoPage(),
         '/mercado': (context) => const MarketPage(),
+        '/testes': (context) => const TestesPage(),
       },
 
       // A widget which will be started on application startup
@@ -93,6 +95,13 @@ class HomePage extends StatelessWidget {
                     Navigator.pushNamed(context, '/mercado');
                   },
                   child: const Text('mercado'),
+                ),
+                const SizedBox(height: 60),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/testes');
+                  },
+                  child: const Text('Testes'),
                 ),
               ]),
         ),
