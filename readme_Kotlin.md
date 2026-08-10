@@ -1,3 +1,99 @@
+# Initial Example: 
+
+<details><summary>detalhes</summary>
+
+### Código em Dart (Interface)
+
+No seu arquivo principal em Dart (como `main.dart`), crie o canal e chame a função nativa:
+
+- Importe os serviços do Flutter.
+- Defina um `MethodChannel` com um nome único.
+- Chame o método assíncrono passando o nome da função do Kotlin.
+
+```kotlin
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+class KotlinIntegrationDemo extends StatefulWidget {
+  @override
+  _KotlinIntegrationDemoState createState() => _KotlinIntegrationDemoState();
+}
+
+class _KotlinIntegrationDemoState extends State<KotlinIntegrationDemo> {
+  static const platform = MethodChannel('com.exemplo/kotlin_bridge');
+  String _resultado = 'Aguardando valor do Kotlin...';
+
+  Future<void> _chamarKotlin() async {
+    String resposta;
+    try {
+      final int resultadoInt = await platform.invokeMethod('obterNumeroNativo');
+      resposta = 'Sucesso! Número do Kotlin: $resultadoInt';
+    } on PlatformException catch (e) {
+      resposta = 'Erro: '${e.message};
+    }
+    setState(() {
+      _resultado = resposta;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Dart + Kotlin no FlutLab')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(_resultado),
+            ElevatedButton(
+              onPressed: _chamarKotlin,
+              child: Text('Chamar Código Kotlin'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+### Código em Kotlin (Nativo Android)
+
+No projeto do FlutLab, abra a pasta estrutural do Android em `android/app/src/main/kotlin/.../MainActivity.kt` e configure o receptor:
+
+- Registre o mesmo nome de canal usado no Dart.
+- Use `setMethodCallHandler` para escutar as chamadas.
+- Retorne um valor aleatório ou dado nativo com `result.success()`.
+
+```kotlin
+package com.exemplo.app // ajuste para o pacote do seu app
+
+import androidx.annotation.NonNull
+import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.plugin.common.MethodChannel
+
+class MainActivity: FlutterActivity() {
+    private val CHANNEL = "com.exemplo/kotlin_bridge"
+
+    override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
+        super.configureFlutterEngine(flutterEngine)
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
+            if (call.method == "obterNumeroNativo") {
+                val numeroAleatorio = (1..100).random()
+                result.success(numeroAleatorio)
+            } else {
+                result.notImplemented()
+            }
+        }
+    }
+}
+```
+
+[How To Use Kotlin Code In Flutter](https://www.youtube.com/watch?v=b6vwXxV0W4Q)
+
+</details>
+
 # Bateria: 
 
 ### homepage.dart
