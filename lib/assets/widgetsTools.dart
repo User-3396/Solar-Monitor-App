@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
 import 'mercado/produto_class.dart';
 import 'styles.dart';
 
@@ -46,5 +47,75 @@ dynamic produtosListView(Future<List<Produto>> _futureProdutos) {
         style: TextStyle(color: Color(0xff9a9a9a)),
       ));
     },
+  );
+}
+
+Row AppBarCustom() {
+  Row(
+    mainAxisSize: MainAxisSize.max,
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.satellite_alt_rounded,
+            color: FlutterFlowTheme.of(context).primary,
+            size: 24,
+          ),
+          Text(
+            'NETPROBE',
+            style: FlutterFlowTheme.of(context).titleMedium.override(
+                  font: GoogleFonts.jetBrainsMono(
+                    fontWeight: FontWeight.bold,
+                    fontStyle:
+                        FlutterFlowTheme.of(context).titleMedium.fontStyle,
+                  ),
+                  color: FlutterFlowTheme.of(context).primaryText,
+                  letterSpacing: 0.0,
+                  fontWeight: FontWeight.bold,
+                  fontStyle: FlutterFlowTheme.of(context).titleMedium.fontStyle,
+                  lineHeight: 1.3,
+                ),
+          ),
+        ].divide(SizedBox(width: 8)),
+      ),
+      Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          FlutterFlowIconButton(
+            borderRadius: 8,
+            buttonSize: 40,
+            fillColor: Colors.transparent,
+            icon: Icon(
+              Icons.settings_input_component_rounded,
+              color: FlutterFlowTheme.of(context).secondaryText,
+              size: 20,
+            ),
+            onPressed: () {
+              print('IconButton pressed ...');
+            },
+          ),
+          FlutterFlowIconButton(
+            borderRadius: 8,
+            buttonSize: 40,
+            fillColor: Colors.transparent,
+            icon: Icon(
+              Icons.refresh_rounded,
+              color: FlutterFlowTheme.of(context).primary,
+              size: 20,
+            ),
+            onPressed: () {
+              print('IconButton pressed ...');
+            },
+          ),
+        ].divide(SizedBox(width: 8)),
+      ),
+    ],
   );
 }

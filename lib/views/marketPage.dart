@@ -31,7 +31,8 @@ class _MarketPageState extends State<MarketPage> {
       Mercado(urlDomain: "sense.osuper.com.br", urlPath: "/319/1545/search");
   bool _sammyIsLoading = false;
   bool _assunIsLoading = false;
-
+  int _sortColumnIndex = 0;
+  bool _isAscending = false;
   //TextEditingController _catCtrl =new TextEditingController()
 
   @override
@@ -65,6 +66,8 @@ class _MarketPageState extends State<MarketPage> {
       //);
     }
   }
+
+  void _ordenar(bool columnIndex, bool ascending) {}
 
   @override
   Widget build(BuildContext context) {
@@ -103,50 +106,7 @@ class _MarketPageState extends State<MarketPage> {
                   ),
                   textos.txt("Lista: ", "attribute"),
                   const SizedBox(height: 24),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: DataTable(
-                        decoration: BoxDecoration(color: Color(0xff868686)),
-                        sortColumnIndex: _sortColumnIndex,
-                        sortAscending: _isAscending,
-                        columns: const [
-                          DataColumn(
-                            label: Text("nome"),
-                            onSort: (columnIndex, ascending) =>
-                                _ordenar(columnIndex, ascending),
-                          ),
-                          DataColumn(
-                            label: Text("preço"),
-                            numeric: true,
-                            onSort: (columnIndex, ascending) =>
-                                _ordenar(columnIndex, ascending),
-                          ),
-                          DataColumn(label: Text("promo")),
-                          DataColumn(label: Text("desc")),
-                        ],
-                        rows: [
-                          DataRow(cells: [
-                            DataCell(Text("10")),
-                            DataCell(Text("10")),
-                            DataCell(Text("40")),
-                            DataCell(Text("30")),
-                          ]),
-                          DataRow(cells: [
-                            DataCell(Text("90")),
-                            DataCell(Text("30")),
-                            DataCell(Text("20")),
-                            DataCell(Text("90")),
-                          ])
-                        ],
-                        //     Sammy.produtos.isEmpty
-                        //         ? '${Sammy.produtos.length}'
-                        //         : Sammy.produtos[0].nome,
-                        //style: const TextStyle(color: Color(0xff808080))
-                      ),
-                    ),
-                  ),
+                  // _Tabela_build (),
                   if (!_sammyIsLoading) ...[
                     if (Sammy.produtos.isNotEmpty) ...[
                       Expanded(
@@ -203,6 +163,53 @@ class _MarketPageState extends State<MarketPage> {
           ]),
         ));
   }
+
+  /*SingleChildScrollView _Tabela_build (Map<String, String> data){
+    SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: DataTable(
+          decoration: BoxDecoration(color: Color(0xff868686)),
+          sortColumnIndex: _sortColumnIndex,
+          sortAscending: _isAscending,
+          columns: const [
+            DataColumn(
+              label: Text("nome"),
+              onSort: (columnIndex, ascending) =>
+                  _ordenar(columnIndex, ascending),
+            ),
+            DataColumn(
+              label: Text("preço"),
+              numeric: true,
+              onSort: (columnIndex, ascending) =>
+                  _ordenar(columnIndex, ascending),
+            ),
+            DataColumn(label: Text("promo")),
+            DataColumn(label: Text("desc")),
+          ],
+          rows: [
+            const DataRow(cells: [
+              DataCell(Text("10")),
+              DataCell(Text("10")),
+              DataCell(Text("40")),
+              DataCell(Text("30")),
+            ]),
+            const DataRow(cells: [
+              DataCell(Text("90")),
+              DataCell(Text("30")),
+              DataCell(Text("20")),
+              DataCell(Text("90")),
+            ])
+          ],
+          //     Sammy.produtos.isEmpty
+          //         ? '${Sammy.produtos.length}'
+          //         : Sammy.produtos[0].nome,
+          //style: const TextStyle(color: Color(0xff808080))
+        ),
+      ),
+    );
+  }*/
 }
 
 /*
