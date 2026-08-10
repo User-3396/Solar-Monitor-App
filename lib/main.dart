@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'views/solarRequestsPage.dart';
+import 'views/imagesPage.dart';
+import 'views/videosPage.dart';
+import 'views/marketPage.dart';
 
 void main() => runApp(MyApp());
 
@@ -17,6 +19,13 @@ class MyApp extends StatelessWidget {
         // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         // useMaterial3: false,
         primarySwatch: Colors.blue,
+        scrollbarTheme: ScrollbarThemeData(
+          // Configura a cor da barrinha móvel para qualquer estado (clicado, arrastado, etc)
+          thumbColor:
+              WidgetStateProperty.all(const Color.fromARGB(180, 255, 185, 0)),
+          // Configura a cor do trilho se quiser que apareça
+          // trackColor: WidgetStateProperty.all(Color(0x7c00ffde)),
+        ),
       ),
 
       // 2. Defina qual rota será a tela inicial do app
@@ -25,7 +34,9 @@ class MyApp extends StatelessWidget {
       // 3. Mapeie os nomes das rotas para as classes das páginas
       routes: {
         '/': (context) => const HomePage(title: 'Pagina inicial'),
-        '/images': (context) => SolarImages(),
+        '/images': (context) => const SolarImagePage(),
+        '/videos': (context) => const SolarVideoPage(),
+        '/mercado': (context) => const MarketPage(),
       },
 
       // A widget which will be started on application startup
@@ -41,23 +52,51 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text(title)),
-        body: Container(
-            width: double.infinity,
-            color: const Color(0xff242424),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  // const Text(
-                  //   'Good bye, World!',
-                  //   style: TextStyle(color: Colors.amber),
-                  // ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/images');
-                    },
-                    child: const Text('imagens'),
-                  ),
-                ])));
+      appBar: AppBar(
+        title: Text(
+          title,
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.amber),
+        ),
+        backgroundColor: Color(0xff640000),
+        shadowColor: Colors.amber,
+      ),
+      body: Container(
+        padding: const EdgeInsets.all(8),
+        width: double.infinity,
+        color: const Color(0xff000000),
+        child: Container(
+          //color: Color(0xff252525),
+          decoration: BoxDecoration(
+            color: const Color(0xff202000),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                ElevatedButton(
+                  onPressed: () {
+                    //Navigator.pushNamed(context, '/images');
+                  },
+                  child: const Text('imagem'),
+                ),
+                const SizedBox(height: 60),
+                ElevatedButton(
+                  onPressed: () {
+                    //Navigator.pushNamed(context, '/videos');
+                  },
+                  child: const Text('video'),
+                ),
+                const SizedBox(height: 60),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/mercado');
+                  },
+                  child: const Text('mercado'),
+                ),
+              ]),
+        ),
+      ),
+    );
   }
 }
