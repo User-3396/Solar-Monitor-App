@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '/flutter_flow/flutter_flow_theme.dart';
+//import '/flutter_flow/flutter_flow_theme.dart';
 import 'mercado/produto_class.dart';
 import 'styles.dart';
 
@@ -50,7 +50,7 @@ dynamic produtosListView(Future<List<Produto>> _futureProdutos) {
   );
 }
 
-Row AppBarCustom() {
+/*Row AppBarCustom() {
   Row(
     mainAxisSize: MainAxisSize.max,
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -118,4 +118,4 @@ Row AppBarCustom() {
       ),
     ],
   );
-}
+}*/

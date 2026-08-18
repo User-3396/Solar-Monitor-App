@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'dart:ui_web' as ui_web; // No Flutter moderno
 import 'dart:html' as html;
 
+import '../assets/channels/battery_channel.dart';
+
 class TestesPage extends StatefulWidget {
   const TestesPage({super.key});
 
@@ -13,29 +15,33 @@ class TestesPage extends StatefulWidget {
 
 class _TestesPageState extends State<TestesPage> {
   //const TestesPage({super.key})
-  
+
   //DateTime agora = DateTime.now();
-  
+  final Battery_Channel _bateria = Battery_Channel();
 
   @override
   void initState() {
     super.initState();
-
-    
   }
 
   @override
   void dispose() {
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text("Monitor Solar",
-              style: TextStyle(color: Colors.amber)),
-          backgroundColor: Color.fromARGB(200, 40, 40, 40)),
+        leading: const Icon(Icons.satellite_alt_rounded),
+        title: const Text("Bateria", style: TextStyle(color: Colors.amber)),
+        backgroundColor: const Color.fromARGB(200, 40, 40, 40),
+        actions: [
+          Row(children: [
+            Icon(Icons.battery_full_sharp, color: Color(0xff00ff00)),
+          ]),
+        ],
+      ),
       body: ConstrainedBox(
         constraints: BoxConstraints(
           minWidth: MediaQuery.of(context).size.width,
@@ -43,16 +49,27 @@ class _TestesPageState extends State<TestesPage> {
         ),
         child: Expanded(
           child: Container(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             color: Colors.black,
-            child: ,
+            child: FutureBuilder<String>(
+                future: _bateria.getBatteryLevel(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return const Text('Erro',
+                        style: TextStyle(color: Color(0xffffffff)));
+                  } else {
+                    print(snapshot.data);
+                    return Text('${snapshot.data}',
+                        style: const TextStyle(color: Color(0xffffffff)));
+                  }
+                }),
           ),
         ),
       ),
     );
   }
-
-  
 
   Widget test() {
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -102,4 +119,8 @@ class _TestesPageState extends State<TestesPage> {
       const SizedBox(height: 20),
     ]);
   }
+
+  // Future<double> _getBatteryLevel() async {
+  //   return 1.0;
+  // }
 }
