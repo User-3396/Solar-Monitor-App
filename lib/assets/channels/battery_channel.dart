@@ -13,8 +13,9 @@ class Battery_Channel {
 
   Future<String> getBatteryLevel() async {
     try {
-      //final int result = await platform.invokeMethod('getBatteryLevel');
-      return await platform.invokeMethod('getBatteryLevel');
+      //final int? result = await platform.invokeMethod<int>('getBatteryLevel');
+      final int? result = await platform.invokeMethod('getBatteryLevel');
+      return result.toString();
       //batteryLevelResult = 'Nível da bateria: $result%.';
       //} on PlatformException catch (e) {
     } catch (e) {

@@ -15,7 +15,6 @@ class TestesPage extends StatefulWidget {
 
 class _TestesPageState extends State<TestesPage> {
   //const TestesPage({super.key})
-
   //DateTime agora = DateTime.now();
   final Battery_Channel _bateria = Battery_Channel();
 
@@ -33,7 +32,8 @@ class _TestesPageState extends State<TestesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const Icon(Icons.satellite_alt_rounded),
+        leading:
+            const Icon(Icons.satellite_alt_rounded, color: Color(0xffd1d100)),
         title: const Text("Bateria", style: TextStyle(color: Colors.amber)),
         backgroundColor: const Color.fromARGB(200, 40, 40, 40),
         actions: [

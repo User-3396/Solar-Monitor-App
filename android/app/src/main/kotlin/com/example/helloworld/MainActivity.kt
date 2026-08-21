@@ -7,7 +7,8 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity: FlutterActivity() {
     private val CHANNEL = "samples.flutter.dev/battery"
 
-    override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
+    //override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
+    override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         
         // Inicializa a classe utilitária passando o 'context' da MainActivity
@@ -15,13 +16,14 @@ class MainActivity: FlutterActivity() {
 
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
             if (call.method == "getBatteryLevel") {
-                val batteryLevel = batteryUtil.getBatteryLevel()
+                //val batteryLevel = batteryUtil.getBatteryLevel()
+                result.success(10)
                 
-                if (batteryLevel != -1) {
-                    result.success(batteryLevel)
-                } else {
-                    result.error("UNAVAILABLE", "Nível da bateria indisponível.", null)
-                }
+                //if (batteryLevel != -1) {
+                //    result.success(batteryLevel)
+                //} else {
+                //    result.error("UNAVAILABLE", "Nível da bateria indisponível.", null)
+                //}
             } else {
                 result.notImplemented()
             }
